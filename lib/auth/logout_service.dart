@@ -1,12 +1,13 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:journal/auth/auth_store.dart';
+import 'package:journal/auth/secure_storage.dart';
 
 class LogoutService {
-  static const _storage = FlutterSecureStorage();
-
   static Future<void> logout() async {
-    final hasKey = await _storage.containsKey(key: "authToken");
+    final hasKey = await secureStorage.containsKey(key: "authToken");
     if (hasKey) {
-      await _storage.delete(key: "authToken");
+      await secureStorage.delete(key: "authToken");
+      // Log user in
+      authStore.logout();
     }
   }
 }

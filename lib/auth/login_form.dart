@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:journal/auth/signup_service.dart';
+import 'package:journal/auth/login_service.dart';
 
 class LoginForm extends StatefulWidget {
   final VoidCallback handleToggleMode;
@@ -47,7 +47,7 @@ class _LoginFormState extends State<LoginForm> {
           width: double.infinity,
           child: CupertinoButton.filled(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            onPressed: _handleSignup,
+            onPressed: _handleLogin,
             child: const Text('Login', style: TextStyle(fontSize: 16)),
           ),
         ),
@@ -69,17 +69,33 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  void _handleSignup() async {
-    final name = nameController.text;
+  void _handleLogin() async {
     final email = emailController.text;
     final password = passwordController.text;
 
     try {
-      await SignupService.signup(name, email, password);
+      await LoginService.login(email, password);
+      setState(() {});
+
+      if (!mounted) return; // Check if the widget is still mounted
+
       // Optionally, navigate to another page or show a success message
     } catch (e) {
-      // Handle error, e.g., show a dialog or a snackbar
-      print("Signup failed: $e");
+      showCupertinoDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: const Text("Login Failed"),
+            content: Text("Something went wrong. Please try again."),
+            actions: [
+              CupertinoDialogAction(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 }

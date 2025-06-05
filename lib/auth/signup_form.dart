@@ -83,10 +83,25 @@ class _SignupFormState extends State<SignupForm> {
 
     try {
       await SignupService.signup(name, email, password);
-      // Optionally, navigate to another page or show a success message
+      setState(() {});
+
+      if (!mounted) return; // Check if the widget is still mounted
     } catch (e) {
-      // Handle error, e.g., show a dialog or a snackbar
-      print("Signup failed: $e");
+      showCupertinoDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: const Text("Sign Up Failed"),
+            content: Text("Something went wrong. Please try again later."),
+            actions: [
+              CupertinoDialogAction(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 }

@@ -10,7 +10,7 @@ class AuthForm extends StatefulWidget {
 }
 
 class _AuthFormState extends State<AuthForm> {
-  String mode = "signup";
+  String mode = "login";
 
   void toggleMode() {
     setState(() {
